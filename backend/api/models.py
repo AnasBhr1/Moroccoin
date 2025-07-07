@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from djongo import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import uuid
@@ -92,9 +89,12 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.transaction_id} - {self.amount} {self.currency}"
 
+def generate_uuid():
+    return str(uuid.uuid4())
+
 class Refund(models.Model):
     """Refund model"""
-    refund_id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4)
+    refund_id = models.CharField(max_length=100, unique=True, primary_key=True, default=generate_uuid)
     transaction_id = models.CharField(max_length=100)
     user_id = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -119,7 +119,7 @@ class Refund(models.Model):
 
 class UserActivity(models.Model):
     """User activity logs"""
-    activity_id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4)
+    activity_id = models.CharField(max_length=100, unique=True, primary_key=True, default=generate_uuid)
     user_id = models.CharField(max_length=100)
     activity_type = models.CharField(
         max_length=30,
@@ -144,7 +144,7 @@ class UserActivity(models.Model):
 
 class ChatMessage(models.Model):
     """Chat messages between users and support"""
-    message_id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4)
+    message_id = models.CharField(max_length=100, unique=True, primary_key=True, default=generate_uuid)
     user_id = models.CharField(max_length=100)
     admin_id = models.CharField(max_length=100, null=True, blank=True)
     message = models.TextField()
@@ -164,7 +164,7 @@ class ChatMessage(models.Model):
 
 class Notification(models.Model):
     """Notifications sent to users"""
-    notification_id = models.CharField(max_length=100, unique=True, primary_key=True, default=uuid.uuid4)
+    notification_id = models.CharField(max_length=100, unique=True, primary_key=True, default=generate_uuid)
     user_id = models.CharField(max_length=100)
     title = models.CharField(max_length=200)
     message = models.TextField()
