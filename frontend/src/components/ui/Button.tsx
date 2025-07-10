@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
@@ -9,15 +8,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-primary-500 to-primary-600 text-primary-foreground hover:from-primary-600 hover:to-primary-700 shadow-lg hover:shadow-xl hover:shadow-primary-500/25 hover:-translate-y-0.5",
+          "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 hover:-translate-y-0.5",
         destructive:
           "bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-lg hover:shadow-xl hover:shadow-red-500/25 hover:-translate-y-0.5",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-md hover:shadow-lg backdrop-blur-sm",
+          "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 shadow-md hover:shadow-lg backdrop-blur-sm",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-md hover:shadow-lg",
-        ghost: "hover:bg-accent hover:text-accent-foreground hover:shadow-md",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-md hover:shadow-lg",
+        ghost: "hover:bg-gray-100 hover:text-gray-900 hover:shadow-md",
+        link: "text-blue-600 underline-offset-4 hover:underline",
         success:
           "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-0.5",
         warning:
@@ -25,7 +24,7 @@ const buttonVariants = cva(
         info:
           "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/25 hover:-translate-y-0.5",
         glass:
-          "bg-white/20 backdrop-blur-md border border-white/20 text-foreground hover:bg-white/30 shadow-lg hover:shadow-xl",
+          "bg-white/20 backdrop-blur-md border border-white/20 text-gray-900 hover:bg-white/30 shadow-lg hover:shadow-xl",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -53,7 +52,8 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading, leftIcon, rightIcon, children, disabled, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+    // For now, we'll render as a regular button since Slot might not be available
+    const Comp = "button"
     
     return (
       <Comp

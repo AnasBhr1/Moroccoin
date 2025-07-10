@@ -3,16 +3,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const cardVariants = cva(
-  "rounded-2xl border bg-card text-card-foreground transition-all duration-300",
+  "rounded-2xl border bg-white text-gray-900 transition-all duration-300",
   {
     variants: {
       variant: {
-        default: "shadow-lg hover:shadow-xl",
-        glass: "bg-white/20 dark:bg-black/20 backdrop-blur-md border-white/20 dark:border-white/10 shadow-lg hover:shadow-xl",
-        gradient: "bg-gradient-to-br from-white/80 to-white/40 dark:from-gray-800/80 dark:to-gray-900/40 backdrop-blur-sm shadow-lg hover:shadow-xl",
-        elevated: "shadow-xl hover:shadow-2xl hover:-translate-y-1",
-        flat: "shadow-sm hover:shadow-md",
-        glow: "shadow-lg hover:shadow-xl hover:shadow-primary-500/20 hover:border-primary-500/50",
+        default: "shadow-lg hover:shadow-xl border-gray-200",
+        glass: "bg-white/20 backdrop-blur-md border-white/20 shadow-lg hover:shadow-xl",
+        gradient: "bg-gradient-to-br from-white/80 to-white/40 backdrop-blur-sm shadow-lg hover:shadow-xl border-white/30",
+        elevated: "shadow-xl hover:shadow-2xl hover:-translate-y-1 border-gray-200",
+        flat: "shadow-sm hover:shadow-md border-gray-200",
+        glow: "shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-500/50 border-gray-200",
       },
       padding: {
         none: "",
@@ -83,7 +83,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-sm text-gray-600", className)}
     {...props}
   />
 ))

@@ -25,24 +25,37 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check if theme is stored in localStorage
-    const storedTheme = localStorage.getItem('theme') as Theme;
-    if (storedTheme) {
-      setThemeState(storedTheme);
-    } else {
-      // Check system preference
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      setThemeState(systemTheme);
+    // Only run this on the client side
+    if (typeof window === 'undefined') return;
+
+    try {
+      // Check if theme is stored in localStorage
+      const storedTheme = localStorage.getItem('theme') as Theme;
+      if (storedTheme && (storedTheme === 'light' || storedTheme === 'dark')) {
+        setThemeState(storedTheme);
+      } else {
+        // Check system preference
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        setThemeState(systemTheme);
+      }
+    } catch (error) {
+      console.error('Error loading theme:', error);
+      setThemeState('light');
     }
+    
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted) {
-      const root = window.document.documentElement;
-      root.classList.remove('light', 'dark');
-      root.classList.add(theme);
-      localStorage.setItem('theme', theme);
+    if (mounted && typeof window !== 'undefined') {
+      try {
+        const root = window.document.documentElement;
+        root.classList.remove('light', 'dark');
+        root.classList.add(theme);
+        localStorage.setItem('theme', theme);
+      } catch (error) {
+        console.error('Error applying theme:', error);
+      }
     }
   }, [theme, mounted]);
 
@@ -54,8 +67,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setThemeState(newTheme);
   };
 
+  // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   const value = {

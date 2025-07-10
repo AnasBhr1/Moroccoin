@@ -41,20 +41,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAuth = async () => {
     try {
+      // Only check localStorage if we're on the client side
+      if (typeof window === 'undefined') {
+        setIsLoading(false);
+        return;
+      }
+
       const token = localStorage.getItem('auth_token');
       const userData = localStorage.getItem('user_data');
       
       if (token && userData) {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        
-        // Validate token by making a profile request
         try {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
+          
+          // Validate token by making a profile request
           const profileData = await apiClient.getProfile();
           setUser(profileData);
           localStorage.setItem('user_data', JSON.stringify(profileData));
         } catch (error) {
           // Token is invalid, clear storage
+          console.error('Token validation failed:', error);
           localStorage.removeItem('auth_token');
           localStorage.removeItem('user_data');
           setUser(null);
@@ -62,8 +69,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user_data');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
+      }
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -76,8 +85,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(response.user);
       
       // Store user data and token
-      localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('auth_token', response.token);
+        localStorage.setItem('user_data', JSON.stringify(response.user));
+      }
     } catch (error) {
       throw error;
     }
@@ -90,8 +101,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Logout error:', error);
     } finally {
       setUser(null);
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user_data');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user_data');
+      }
     }
   };
 
@@ -99,7 +112,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (user) {
       const updatedUser = { ...user, ...userData };
       setUser(updatedUser);
-      localStorage.setItem('user_data', JSON.stringify(updatedUser));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user_data', JSON.stringify(updatedUser));
+      }
     }
   };
 
