@@ -509,4 +509,4 @@ For support and questions:
 
 ---
 
-**Made with ❤️ by the Moroccoin Team**
+**Made with ❤️ by the Anas**
